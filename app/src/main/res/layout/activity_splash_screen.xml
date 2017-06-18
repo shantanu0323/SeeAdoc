@@ -48,7 +48,7 @@
                 android:id="@+id/title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="D"
+                android:text="S"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -56,7 +56,7 @@
                 android:id="@+id/title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="o"
+                android:text="e"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -64,7 +64,7 @@
                 android:id="@+id/title3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="c"
+                android:text="e"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -72,7 +72,7 @@
                 android:id="@+id/title4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="M"
+                android:text="A"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -80,7 +80,7 @@
                 android:id="@+id/title5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="a"
+                android:text="d"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -88,7 +88,7 @@
                 android:id="@+id/title6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="t"
+                android:text="o"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
 
@@ -96,7 +96,7 @@
                 android:id="@+id/title7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="e"
+                android:text="c"
                 android:textColor="#fff"
                 android:textSize="70sp"/>
         </LinearLayout>
