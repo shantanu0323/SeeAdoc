@@ -38,7 +38,7 @@ import shantanu.seeadoc.Data.Patient;
 public class PatientRegistration extends AppCompatActivity {
 
     private static final String TAG = "PatientRegistration";
-    private static final String DEFAULT_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/docmate-d670e.appspot.com/o/default_image.png?alt=media&token=5431adb3-2946-41e5-9b67-4cf07b4aaa78";
+    private static final String DEFAULT_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/seeadoc-d731b.appspot.com/o/ProfilePics%2Fdefault_image.png?alt=media&token=7af1bc9d-22be-47e9-afb3-35ab4416d8cc";
     private static final int GALLERY_REQUEST = 10;
 
     private ImageButton bAddImage;
@@ -281,6 +281,7 @@ public class PatientRegistration extends AppCompatActivity {
                                 currentUser.child("gender").setValue(patient.getGender());
                                 currentUser.child("phone").setValue(patient.getPhone());
                                 currentUser.child("bloodgroup").setValue(patient.getBloodGroup());
+                                currentUser.child("uid").setValue(userId);
                                 progressDialog.dismiss();
                                 Log.e(TAG, "onComplete: Redirecting to HomeActivity");
                                 Toast.makeText(PatientRegistration.this, "Registration Successfull !!!",

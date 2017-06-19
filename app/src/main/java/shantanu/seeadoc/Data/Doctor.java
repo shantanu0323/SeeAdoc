@@ -11,20 +11,37 @@ public class Doctor {
     private String degree;
     private String address;
     private String phone;
-    private String specializtion;
+    private String specialization;
     private String email;
     private String password;
+    private String uid;
 
-    public Doctor(String profilePic, String gender, String name, String degree, String address, String phone, String specializtion, String email, String password) {
+    public Doctor() {
+    }
+
+    public Doctor(String profilePic, String gender, String name, String degree, String address, String phone, String specialization, String email, String password, String uid) {
         this.profilePic = profilePic;
         this.gender = gender;
         this.name = name;
         this.degree = degree;
         this.address = address;
         this.phone = phone;
-        this.specializtion = specializtion;
+        this.specialization = specialization;
         this.email = email;
         this.password = password;
+        this.uid = uid;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -91,11 +108,11 @@ public class Doctor {
         this.phone = phone;
     }
 
-    public String getSpecializtion() {
-        return specializtion;
+    public String getSpecialization() {
+        return specialization;
     }
 
     public void setSpecializtion(String specializtion) {
-        this.specializtion = specializtion;
+        this.specialization = specializtion;
     }
 }
