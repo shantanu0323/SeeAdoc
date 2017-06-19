@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
     private DatabaseReference databaseDoctors;
     private RecyclerView doctorList;
     private boolean flag = true;
+    private boolean loadingDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class HomeActivity extends AppCompatActivity
         doctorList = (RecyclerView) findViewById(R.id.doctorList);
         doctorList.setHasFixedSize(true);
         doctorList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -126,6 +127,7 @@ public class HomeActivity extends AppCompatActivity
         };
         progressDialog = new ProgressDialog(this);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -133,8 +135,10 @@ public class HomeActivity extends AppCompatActivity
         if (auth != null) {
             auth.addAuthStateListener(authStateListener);
         }
-        progressDialog.setMessage("Loading...");
-        progressDialog.show();
+        if (!loadingDone) {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+        }
         FirebaseRecyclerAdapter<Doctor, DoctorViewHolder> adapter = new FirebaseRecyclerAdapter<Doctor, DoctorViewHolder>(
                 Doctor.class,
                 R.layout.row_doctor,
@@ -162,6 +166,7 @@ public class HomeActivity extends AppCompatActivity
                                             .getValue().toString());
                                     if (flag) {
                                         progressDialog.dismiss();
+                                        loadingDone = true;
                                         flag = false;
                                     }
                                 }
@@ -178,6 +183,10 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(HomeActivity.this, "Doctor : " + doctorKey, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), ViewDoctorProfile.class);
+                        intent.putExtra("doctorUid", doctorKey);
+                        intent.putExtra("patientUid", auth.getCurrentUser().getUid());
+                        startActivity(intent);
                     }
                 });
 
@@ -259,6 +268,5 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 }
