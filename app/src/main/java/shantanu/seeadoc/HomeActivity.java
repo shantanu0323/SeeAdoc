@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -141,18 +140,18 @@ public class HomeActivity extends AppCompatActivity
         }
         FirebaseRecyclerAdapter<Doctor, DoctorViewHolder> adapter = new FirebaseRecyclerAdapter<Doctor, DoctorViewHolder>(
                 Doctor.class,
-                R.layout.row_doctor,
+                R.layout.doctor_item_layout,
                 DoctorViewHolder.class,
                 databaseDoctors
         ) {
             @Override
             protected void populateViewHolder(final DoctorViewHolder viewHolder, final Doctor model, final int position) {
-                Log.i(TAG, "populateViewHolder: Started");
+//                Log.i(TAG, "populateViewHolder: Started");
                 final String doctorKey = getRef(position).getKey().toString();
 
 
-                Log.i(TAG, "populateViewHolder: Name : " + model.getName());
-                Log.i(TAG, "populateViewHolder: Specialization : " + model.getSpecialization());
+//                Log.i(TAG, "populateViewHolder: Name : " + model.getName());
+//                Log.i(TAG, "populateViewHolder: Specialization : " + model.getSpecialization());
                 viewHolder.setName(model.getName());
                 viewHolder.setSpecialization(model.getSpecialization());
 
@@ -161,7 +160,7 @@ public class HomeActivity extends AppCompatActivity
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
-                                    Log.i(TAG, "onDataChange: profilePic");
+//                                    Log.i(TAG, "onDataChange: profilePic");
                                     viewHolder.setProfilePic(getApplicationContext(), dataSnapshot
                                             .getValue().toString());
                                     if (flag) {

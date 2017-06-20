@@ -5,7 +5,7 @@ package shantanu.seeadoc.Data;
  */
 
 public class Doctor {
-    private String profilePic;
+    private String profilepic;
     private String gender;
     private String name;
     private String degree;
@@ -19,8 +19,8 @@ public class Doctor {
     public Doctor() {
     }
 
-    public Doctor(String profilePic, String gender, String name, String degree, String address, String phone, String specialization, String email, String password, String uid) {
-        this.profilePic = profilePic;
+    public Doctor(String profilepic, String gender, String name, String degree, String address, String phone, String specialization, String email, String password, String uid) {
+        this.profilepic = profilepic;
         this.gender = gender;
         this.name = name;
         this.degree = degree;
@@ -31,6 +31,7 @@ public class Doctor {
         this.password = password;
         this.uid = uid;
     }
+
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
@@ -60,12 +61,12 @@ public class Doctor {
         this.password = password;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilepic() {
+        return profilepic;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilepic(String profilepic) {
+        this.profilepic = profilepic;
     }
 
     public String getGender() {

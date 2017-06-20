@@ -28,7 +28,7 @@ public class DoctorViewHolder extends RecyclerView.ViewHolder {
     public DoctorViewHolder(View itemView) {
         super(itemView);
         view = itemView;
-        bProfilePic = (ImageView) view.findViewById(R.id.profilePic);
+        bProfilePic = (ImageView) view.findViewById(R.id.profilepic);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -36,17 +36,17 @@ public class DoctorViewHolder extends RecyclerView.ViewHolder {
     public void setName(String name) {
         TextView tvName = (TextView) view.findViewById(R.id.tvName);
         tvName.setText(name);
-        Log.i(TAG, "setName: " + name);
+//        Log.i(TAG, "setName: " + name);
     }
 
     public void setSpecialization(String specialization) {
         TextView tvSpecialization = (TextView) view.findViewById(R.id.tvSpecialization);
         tvSpecialization.setText(specialization);
-        Log.i(TAG, "setSpecialization: " + specialization);
+//        Log.i(TAG, "setSpecialization: " + specialization);
     }
 
     public void setProfilePic(final Context context, final String profilePicUrl) {
-        final ImageView profilePic = (ImageView) view.findViewById(R.id.profilePic);
+        final ImageView profilePic = (ImageView) view.findViewById(R.id.profilepic);
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         Picasso.with(context).load(profilePicUrl).networkPolicy(NetworkPolicy.OFFLINE).into(profilePic,
