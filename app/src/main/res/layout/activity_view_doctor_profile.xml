@@ -23,7 +23,7 @@
 
 
     <Button
-        android:background="@drawable/bg_ripple_book"
+        android:background="@drawable/bg_blank"
         android:id="@+id/bBookAppointment"
         android:textColor="#fff"
         android:textSize="18sp"

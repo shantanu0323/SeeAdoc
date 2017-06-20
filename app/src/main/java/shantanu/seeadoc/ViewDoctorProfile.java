@@ -61,9 +61,13 @@ public class ViewDoctorProfile extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(patientUid)) {
+                    Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
                     appointmentBooked = true;
+                    Log.i(TAG, "onDataChange: APPOINTMENT BOOKED");
                 } else {
+                    Log.i(TAG, "onDataChange: " + dataSnapshot.getValue());
                     appointmentBooked = false;
+                    Log.i(TAG, "onDataChange: APPOINTMENT NOT BOOKED");
                 }
             }
 
@@ -142,7 +146,7 @@ public class ViewDoctorProfile extends AppCompatActivity {
         databaseAppointments = doctorDatabase.getReference().child("appointments");
         databaseAppointments.keepSynced(true);
 
-        databaseBookedAppointments = doctorDatabase.getReference().child("doctor").child("patients");
+        databaseBookedAppointments = doctorDatabase.getReference().child("doctor").child(doctorUid).child("patients");
         databaseBookedAppointments.keepSynced(true);
 
         databaseRejectedPatients = FirebaseDatabase.getInstance().getReference().child("rejected");
@@ -186,7 +190,7 @@ public class ViewDoctorProfile extends AppCompatActivity {
                             Log.i(TAG, "onDataChange: Accepted");
                             bBookAppointment.setText("Appointment Confirmed");
                             bBookAppointment.setBackground(getResources().getDrawable(R.drawable.bg_blank));
-                            bBookAppointment.setTextColor(Color.rgb(0, 200, 200));
+                            bBookAppointment.setTextColor(Color.rgb(0, 220, 200));
                             bBookAppointment.setClickable(false);
                         } else {
                             if (appointmentRejected) {
