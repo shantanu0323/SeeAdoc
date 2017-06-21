@@ -25,19 +25,21 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="Login"/>
+            android:label="Login" />
         <activity
             android:name=".PatientRegistration"
-            android:label="Patient Registration"/>
+            android:label="Patient Registration" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-
-        <activity android:name=".ViewDoctorProfile"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ViewDoctorProfile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SendReports"
+            android:label="SendReports"></activity>
     </application>
 
 </manifest>

@@ -11,25 +11,25 @@
         android:id="@+id/tvRejected"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="#d00"
         android:gravity="center"
-        android:visibility="gone"
         android:padding="5dp"
         android:text="Sorry!!! Your appointment request has been rejected"
+        android:textColor="#d00"
+        android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/bBookAppointment"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
 
     <Button
-        android:background="@drawable/bg_blank"
         android:id="@+id/bBookAppointment"
-        android:textColor="#fff"
-        android:textSize="18sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_blank"
         android:text="Book an Appointment"
+        android:textColor="#fff"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -123,6 +123,16 @@
 
     </FrameLayout>
 
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bSendReports"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_send_reports"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>
 
