@@ -30,11 +30,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
 import shantanu.seeadoc.Data.Doctor;
+import shantanu.seeadoc.Data.Prescription;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +50,8 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView doctorList;
     private boolean flag = true;
     private boolean loadingDone = false;
+    private RecyclerView prescriptionsList;
+    private DatabaseReference databasePrescriptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,10 @@ public class HomeActivity extends AppCompatActivity
         databaseDoctors = doctorDatabase.getReference().child("doctor");
         databaseDoctors.keepSynced(true);
 
+        databasePrescriptions =FirebaseDatabase.getInstance().getReference().child("patient")
+                .child(auth.getCurrentUser().getUid()).child("prescriptions");
+        databasePrescriptions.keepSynced(true);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +101,13 @@ public class HomeActivity extends AppCompatActivity
         doctorList = (RecyclerView) findViewById(R.id.doctorList);
         doctorList.setHasFixedSize(true);
         doctorList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        prescriptionsList = (RecyclerView) findViewById(R.id.prescriptionsList);
+        prescriptionsList.setHasFixedSize(true);
+        prescriptionsList.setItemViewCacheSize(20);
+        prescriptionsList.setDrawingCacheEnabled(true);
+        prescriptionsList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        prescriptionsList.setLayoutManager(new LinearLayoutManager(this));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -195,6 +210,61 @@ public class HomeActivity extends AppCompatActivity
 
         adapter.notifyDataSetChanged();
         doctorList.setAdapter(adapter);
+
+        final FirebaseRecyclerAdapter<Prescription, PrescriptionViewHolder> prescriptionsAdapter = new FirebaseRecyclerAdapter<Prescription, PrescriptionViewHolder>(
+                Prescription.class,
+                R.layout.prescriptions_item_layout,
+                PrescriptionViewHolder.class,
+                databasePrescriptions
+        ) {
+            @Override
+            protected void populateViewHolder(final PrescriptionViewHolder viewHolder, final Prescription model, final int position) {
+                final String prescriptionKey = getRef(position).getKey().toString();
+
+                Log.i(TAG, "populateViewHolder: name : " + model.getName());
+                Log.i(TAG, "populateViewHolder: image : " + model.getImage());
+                Log.i(TAG, "populateViewHolder: message : " + model.getMessage());
+                Log.i(TAG, "populateViewHolder: profilepic : " + model.getProfilepic());
+
+                viewHolder.setName(model.getName());
+                viewHolder.setImage(getApplicationContext(), model.getImage(), getWindowManager().getDefaultDisplay().getWidth());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setProfilepic(getApplicationContext(), model.getProfilepic(), getWindowManager().getDefaultDisplay().getWidth());
+
+                // Adding OnClickListener() to the entire Card
+                viewHolder.view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(HomeActivity.this, "Prescription : " + prescriptionKey, Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(getApplicationContext(), PatientProfile.class);
+//                        intent.putExtra("patientUid", prescriptionKey);
+//                        intent.putExtra("doctorUid", auth.getCurrentUser().getUid());
+//                        startActivity(intent);
+                    }
+                });
+
+            }
+        };
+
+        prescriptionsAdapter.notifyDataSetChanged();
+        prescriptionsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int friendlyMessageCount = prescriptionsAdapter.getItemCount();
+                int lastVisiblePosition =
+                        ((LinearLayoutManager) prescriptionsList.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                // If the recycler view is initially being loaded or the
+                // user is at the bottom of the list, scroll to the bottom
+                // of the list to show the newly added message.
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) &&
+                                lastVisiblePosition == (positionStart - 1))) {
+                    prescriptionsList.scrollToPosition(positionStart);
+                }
+            }
+        });
+        prescriptionsList.setAdapter(prescriptionsAdapter);
     }
 
     @Override

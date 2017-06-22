@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,12 +17,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class SendReports extends AppCompatActivity {
@@ -39,6 +45,8 @@ public class SendReports extends AppCompatActivity {
     private String reportKey;
     private EditText etMessage;
     private DatabaseReference databasePatient;
+    private String name;
+    private String profilepic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,7 @@ public class SendReports extends AppCompatActivity {
 
         init();
         initializeDocmate();
+        retrieveData();
 
         ivReports = (ImageView) findViewById(R.id.ivReport);
         Log.i(TAG, "onCreate: reportImageUri : " + reportImageUri);
@@ -54,18 +63,36 @@ public class SendReports extends AppCompatActivity {
 
     }
 
+    private void retrieveData() {
+        final DatabaseReference databasePatient = FirebaseDatabase.getInstance().getReference().child("patient").child(patientUid);
+        databasePatient.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("name")) {
+                    name = dataSnapshot.child("name").getValue().toString();
+                }
+                if (dataSnapshot.hasChild("profilepic")) {
+                    profilepic = dataSnapshot.child("profilepic").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void initializeDocmate() {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setApplicationId("1:530266078999:android:481c4ecf3253701e") // Required for Analytics.
                 .setApiKey("AIzaSyBRxOyIj5dJkKgAVPXRLYFkdZwh2Xxq51k") // Required for Auth.
                 .setDatabaseUrl("https://docmate-d670e.firebaseio.com/")// Required for RTDB.
-//                .setStorageBucket("gs://docmate-d670e.appspot.com/")
                 .build();
         String doctorApp = UUID.randomUUID().toString();
         try {
             FirebaseApp doctorApplication = FirebaseApp.initializeApp(this, options, doctorApp);
             // Retrieve my other app.
-//            FirebaseApp doctorApplication = FirebaseApp.getInstance(doctorApp);
 //             Get the database for the other app.
             FirebaseDatabase doctorDatabase = FirebaseDatabase.getInstance(doctorApplication);
 
@@ -87,14 +114,14 @@ public class SendReports extends AppCompatActivity {
     }
 
     private void uploadReport() {
+        final String time = getCurrentTime();
         Log.e(TAG, "uploadReport: FUNCTION STARTED");
         progressDialog.show();
         reportKey = databaseReports.push().getKey();
         if (reportImageUri != null) {
             Log.e(TAG, "uploadReport: URI NOT NULL");
             Log.i(TAG, "uploadReport: strorageReports : " + ((storageReports == null) ? "null" : "NOT null"));
-            StorageReference filePath = storageReports.child("Reports").child(reportImageUri
-                    .getLastPathSegment());
+            StorageReference filePath = storageReports.child("Reports").child(UUID.randomUUID().toString());
             filePath.putFile(reportImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -102,11 +129,19 @@ public class SendReports extends AppCompatActivity {
 
                     DatabaseReference newReport = databaseReports.child(reportKey);
                     newReport.child("image").setValue(downloadUrl.toString());
-                    newReport.child("message").setValue(etMessage.getText().toString().trim());
+                    newReport.child("message").setValue(getMessage());
+                    newReport.child("profilepic").setValue(profilepic);
+                    newReport.child("uid").setValue(patientUid);
+                    newReport.child("name").setValue(name);
+                    newReport.child("time").setValue(time);
 
                     newReport = databasePatient.child("reports").child(reportKey);
                     newReport.child("image").setValue(downloadUrl.toString());
-                    newReport.child("message").setValue(etMessage.getText().toString().trim());
+                    newReport.child("message").setValue(getMessage());
+                    newReport.child("profilepic").setValue(profilepic);
+                    newReport.child("uid").setValue(patientUid);
+                    newReport.child("name").setValue(name);
+                    newReport.child("time").setValue(time);
 
                     Log.e(TAG, "onSuccess: Report Image Added ...");
                     Toast.makeText(SendReports.this, "Report Sent Successfully", Toast.LENGTH_SHORT).show();
@@ -128,6 +163,33 @@ public class SendReports extends AppCompatActivity {
         }
     }
 
+    private String getMessage() {
+        String message = "Hey Doc. This is my LAB Report...";
+        if (!TextUtils.isEmpty(etMessage.getText().toString().trim())) {
+            message = etMessage.getText().toString().trim();
+        }
+        return message;
+    }
+
+    private String getCurrentTime() {
+        Calendar c = Calendar.getInstance();
+        Log.e("Current time => ", " " + c.getTime());
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("d");
+        String date = dateFormatter.format(c.getTime());
+
+        if(date.endsWith("1") && !date.endsWith("11"))
+            dateFormatter = new SimpleDateFormat("d'st' MMMM',' yyyy'\n' h:mm a");
+        else if(date.endsWith("2") && !date.endsWith("12"))
+            dateFormatter = new SimpleDateFormat("d'nd' MMMM',' yyyy'\n' h:mm a");
+        else if(date.endsWith("3") && !date.endsWith("13"))
+            dateFormatter = new SimpleDateFormat("d'rd' MMMM',' yyyy'\n' h:mm a");
+        else
+            dateFormatter = new SimpleDateFormat("d'th' MMMM',' yyyy'\n' h:mm a");
+
+        String formattedDate = dateFormatter.format(c.getTime());
+        Log.e("Current time => ", formattedDate);
+        return formattedDate;
+    }
     private void init() {
         doctorUid = getIntent().getStringExtra("doctorUid");
         patientUid = getIntent().getStringExtra("patientUid");

@@ -41,6 +41,8 @@ dependencies {
     compile 'com.squareup.okio:okio:1.10.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
     compile 'com.android.support:design:25.3.1'
+    compile 'com.googlecode.android-query:android-query:0.24.3'
+
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'
